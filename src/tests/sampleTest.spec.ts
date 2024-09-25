@@ -16,8 +16,8 @@ test("Sample Test", async ({ page }) => {
 
     //Asserting the textbox value
     expect(textBoxData).toContain(testData[1].name);
-    expect(textBoxData).toContain(testData[1].age);
-    expect(textBoxData).toContain(testData[1].gender);
+    expect(textBoxData).toContain(testData[2].name);
+    expect(textBoxData).toContain(testData[3].name);
 
     await page.waitForTimeout(5000);// just to see the UI while running script
 })
