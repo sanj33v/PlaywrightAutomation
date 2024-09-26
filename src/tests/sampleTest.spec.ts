@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import testData from '../testData/userData.json';
+import testJsonData from '../testData/userData.json';
 
 test("Sample Test", async ({ page }) => {
 
@@ -9,15 +9,16 @@ test("Sample Test", async ({ page }) => {
     await page.locator("//summary[normalize-space()='Table Data']").click();
 
     // Inserting JSON data into the textbox
-    await page.fill("//textarea[@id='jsondata']", JSON.stringify(testData));
+    await page.fill("//textarea[@id='jsondata']", JSON.stringify(testJsonData));
     await page.locator("//button[@id='refreshtable']").click();
 
     const textBoxData = await page.locator("//textarea[@id='jsondata']").inputValue();
+    const textBoxJsonData=JSON.parse(textBoxData);
+    
+    //comparing the textbox value and json data
+    expect(textBoxJsonData).toEqual(testJsonData);
 
-    //Asserting the textbox value
-    expect(textBoxData).toContain(testData[1].name);
-    expect(textBoxData).toContain(testData[2].name);
-    expect(textBoxData).toContain(testData[3].name);
-
+    console.log(textBoxJsonData);//consoling just to see the data 
+    console.log(testJsonData);//consoling just to see the data 
     await page.waitForTimeout(5000);// just to see the UI while running script
 })
