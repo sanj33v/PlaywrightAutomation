@@ -9,7 +9,7 @@ test("Sample Test", async ({ page }) => {
     await page.locator("//summary[normalize-space()='Table Data']").click();
 
     // Inserting JSON data into the textbox
-    await page.fill("//textarea[@id='jsondata']", JSON.stringify(testJsonData));
+    await page.locator("//textarea[@id='jsondata']").fill(JSON.stringify(testJsonData));
     await page.locator("//button[@id='refreshtable']").click();
 
     const textBoxData = await page.locator("//textarea[@id='jsondata']").inputValue();
