@@ -1,4 +1,4 @@
-import { Page} from "@playwright/test"
+import { Page } from "@playwright/test"
 
 
 export default class HomePage {
@@ -12,7 +12,7 @@ export default class HomePage {
     private readonly addStudent = "//em[@class='rta-icon plus-lg']";
     private readonly firstName = "//input[@id='firstName']";
     private readonly lastName = "//input[@id='lastName']";
-    private readonly uploadPhoto="//label[@class='fileUpload action-link btn-link blue mt-2 mb-0 blue-label']"
+    private readonly uploadPhoto = "//label[@class='fileUpload action-link btn-link blue mt-2 mb-0 blue-label']"
     private readonly studentId = "//div[@class='col-12 col-md-4 col-lg-3']//div//input[@id='stateTestNumber']";
     private readonly selectGender = "//select[@id='genderDD']";
     private readonly studentGender = "Male";
@@ -49,17 +49,14 @@ export default class HomePage {
             console.error(`error clicking login button ${error}`);
             throw error;
         });
-        // const homepage = new HomePage(this.page);
-        // return homepage;
-
     }
-    
+
     public async navigateToStudent() {
         await this.page.waitForSelector(this.studentTab)
         await this.page.locator(this.studentTab).click();
     }
 
-    public async addStudents() {         
+    public async addStudents() {
         await this.page.waitForSelector(this.addStudent)
         await this.page.locator(this.addStudent).click();
         await this.page.waitForSelector(this.firstName);
@@ -79,12 +76,12 @@ export default class HomePage {
         await this.page.locator(this.saveAndClose).click();
     }
 
-    public async uploadStudentPhoto(){
+    public async uploadStudentPhoto() {
         const [UploadFile] = await Promise.all([
             this.page.waitForEvent('filechooser'),
             this.page.locator(this.uploadPhoto).click()
         ])
-        UploadFile.setFiles("src/img.jpg");    
+        UploadFile.setFiles("src/img.jpg");
         await this.page.waitForTimeout(5000);
     }
 }
