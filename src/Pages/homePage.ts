@@ -32,6 +32,12 @@ export default class HomePage {
     private readonly createPassword = "//input[@id='password']";
     private readonly confirmPassword = "//input[@id='password2']";
     private readonly saveAndClose = "//button[@class='btn btn-primary btn-icon mb-2']";
+    private readonly assignTeamMember="//span[@class='pe-2']";
+    private readonly addClassRoom="//button[@id='dropdownMenu']";
+    private readonly addExistingClass="//a[normalize-space()='Add existing classroom']";
+    private readonly existingClass="(//span[@class='badge rounded-pill'][normalize-space()='ADD'])[3]";
+    private readonly saveClass="//button[@class='btn btn-success'][normalize-space()='Save']";
+
 
     constructor(private page: Page) {
 
@@ -73,7 +79,7 @@ export default class HomePage {
         await this.page.locator(this.createPassword).fill("sanjeev@123");
         await this.page.locator(this.confirmPassword).fill("sanjeev@123");
         await this.uploadStudentPhoto();
-        await this.page.locator(this.saveAndClose).click();
+       // await this.page.locator(this.saveAndClose).click();
     }
 
     public async uploadStudentPhoto() {
@@ -82,6 +88,15 @@ export default class HomePage {
             this.page.locator(this.uploadPhoto).click()
         ])
         UploadFile.setFiles("src/img.jpg");
+        await this.page.waitForTimeout(5000);
+    }
+
+    public async assignMember(){
+        await this.page.locator(this.assignTeamMember).click();
+        await this.page.locator(this.addClassRoom).click();
+        await this.page.locator(this.addExistingClass).click();
+        await this.page.locator(this.existingClass).click();
+        await this.page.locator(this.saveClass).click();
         await this.page.waitForTimeout(5000);
     }
 }

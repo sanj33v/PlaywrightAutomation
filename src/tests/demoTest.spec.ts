@@ -9,7 +9,7 @@ test("DemoTest", async ({ page }) => {
 
     //Login to the application
     await homepage.login();
-    
+
     //Validating Landing page
     expect(page.isVisible(homepage.Logo)).toBeTruthy();
 
@@ -21,4 +21,7 @@ test("DemoTest", async ({ page }) => {
 
     //Creating new student with all details
     await homepage.addStudents();
+
+    //assigning team member
+    await homepage.assignMember();
 })
