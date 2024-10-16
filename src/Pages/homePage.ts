@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test"
-import { Locators } from "../Constants.ts/UIElements";
+import { Locators } from "../Constants/UIElements";
 
 function createGuid() {
     function S4() {
