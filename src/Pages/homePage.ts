@@ -1,42 +1,20 @@
 import { Page } from "@playwright/test"
+import { Locators } from "../Constants.ts/UIElements";
 
+function createGuid() {
+    function S4() {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(36).substring(1);
+    }
+    return (S4() + "-" + S4()).toLowerCase();
+}
 
-export default class HomePage {
-    private readonly Url = "https://rta-edu-stg-web-03.azurewebsites.net/core";
-    private readonly userName = "//input[@id='signInName']";
-    private readonly password = "//input[@id='password']";
-    private readonly signIn = "//button[@id='next']";
-    public readonly Logo = "[aria-label='Rethink Ed logo']";
-    private readonly studentTab = "li[role='tablist'] a[aria-label='Students']";
-    public readonly studentPage = "//h1[normalize-space()='My Students']";
-    private readonly addStudent = "//em[@class='rta-icon plus-lg']";
-    private readonly firstName = "//input[@id='firstName']";
-    private readonly lastName = "//input[@id='lastName']";
-    private readonly uploadPhoto = "//label[@class='fileUpload action-link btn-link blue mt-2 mb-0 blue-label']"
-    private readonly studentId = "//div[@class='col-12 col-md-4 col-lg-3']//div//input[@id='stateTestNumber']";
-    private readonly selectGender = "//select[@id='genderDD']";
-    private readonly studentGender = "Male";
-    private readonly selectEthnicity = "//select[@id='ethnicityDD']";
-    private readonly studentEthnicity = 'Asian';////option[normalize-space()='Asian']
-    private readonly selectBuilding = "//div[@class='col-12 col-md-4 col-lg-3']//div//select[@id='schoolDD']";
-    private readonly studentBuilding = "Sub Account 1";////div[@class='col-12 col-md-4 col-lg-3']//div//option[@value='17973'][normalize-space()='Sub Account 1']
-    private readonly studentbirthday = "//input[@id='datepicker-1']";
-    private readonly Birthday = "12/3/1992";
-    private readonly selectGrade = "//select[@id='gradeDD']";
-    private readonly studentGrade = "Grade 1";////option[normalize-space()='Grade 1']
-    private readonly Email = "//input[@id='email']";
-    private readonly studentEamil = "sanjeev123@gmail.com";
-    private readonly studentAcademicNeed = "//input[@id='iep_selected']";
-    private readonly otherDetails = "//body/app-root/div[@id='skipcontent']/add-edit-student/div[@class='card']/div[@class='card-body px-sm-5']/div/form[@class='ng-invalid ng-touched ng-dirty']/div[@id='form1Start']/div[@class='row']/div[@class='col-12 col-md-5 col-lg-7']/div/div[@class='row']/div[1]/span[1]";
-    private readonly createUserName = "//input[@id='userName']";
-    private readonly createPassword = "//input[@id='password']";
-    private readonly confirmPassword = "//input[@id='password2']";
-    private readonly saveAndClose = "//button[@class='btn btn-primary btn-icon mb-2']";
-    private readonly assignTeamMember="//span[@class='pe-2']";
-    private readonly addClassRoom="//button[@id='dropdownMenu']";
-    private readonly addExistingClass="//a[normalize-space()='Add existing classroom']";
-    private readonly existingClass="(//span[@class='badge rounded-pill'][normalize-space()='ADD'])[3]";
-    private readonly saveClass="//button[@class='btn btn-success'][normalize-space()='Save']";
+var guid = createGuid();
+var mobNo = Math.floor(Math.random() * 9000000000) + 1000000000;
+
+const Name = "SanjeevKumar" + guid;
+const userName = "SanjeevKumar@" + guid;
+const emailId = guid + "sanjeev@gmail.com"
+export default class homePage {
 
 
     constructor(private page: Page) {
@@ -44,59 +22,64 @@ export default class HomePage {
     }
 
     async navigateToUrl() {
-        await this.page.goto(this.Url);
-        await this.page.waitForLoadState();
+        await this.page.goto(Locators.baseUrl);
+        await this.page.waitForLoadState("domcontentloaded");
+        await this.page.waitForLoadState("networkidle");
     }
 
     public async login() {
-        await this.page.locator(this.userName).fill("kavithasub")
-        await this.page.locator(this.password).fill("Welcome123")
-        await this.page.locator(this.signIn).click().catch((error) => {
+        await this.page.getByPlaceholder(Locators.userName).fill('kavithasub');
+        await this.page.getByPlaceholder(Locators.password).click();
+        await this.page.getByPlaceholder(Locators.password).fill('Welcome123');
+        await this.page.getByRole('button', { name: 'Sign in' }).click().catch((error) => {
             console.error(`error clicking login button ${error}`);
             throw error;
         });
     }
 
-    public async navigateToStudent() {
-        await this.page.waitForSelector(this.studentTab)
-        await this.page.locator(this.studentTab).click();
+    public async navigateToSetup() {
+        await this.page.getByRole('link', { name: 'Setup' }).click();
+        await this.page.getByLabel(Locators.manageMember).click();
+        await this.page.getByRole('textbox', { name: 'Search team members' }).click();
     }
 
-    public async addStudents() {
-        await this.page.waitForSelector(this.addStudent)
-        await this.page.locator(this.addStudent).click();
-        await this.page.waitForSelector(this.firstName);
-        await this.page.locator(this.firstName).fill("Sanjeev");
-        await this.page.locator(this.lastName).fill("Singh");
-        await this.page.locator(this.studentId).fill("001");
-        await this.page.locator(this.selectGender).selectOption(this.studentGender);
-        await this.page.locator(this.selectEthnicity).selectOption(this.studentEthnicity);
-        await this.page.locator(this.selectBuilding).selectOption(this.studentBuilding);
-        await this.page.locator(this.selectGrade).selectOption(this.studentGrade);
-        await this.page.locator(this.Email).fill(this.studentEamil);
-        await this.page.locator(this.studentAcademicNeed).click();
-        await this.page.locator(this.createUserName).fill("sanjeev_singh2411");
-        await this.page.locator(this.createPassword).fill("sanjeev@123");
-        await this.page.locator(this.confirmPassword).fill("sanjeev@123");
-        await this.uploadStudentPhoto();
-       // await this.page.locator(this.saveAndClose).click();
-    }
-
-    public async uploadStudentPhoto() {
-        const [UploadFile] = await Promise.all([
-            this.page.waitForEvent('filechooser'),
-            this.page.locator(this.uploadPhoto).click()
-        ])
-        UploadFile.setFiles("src/img.jpg");
+    public async addMembers() {
+        await this.page.getByRole('button', { name: 'Add Team Member' }).click();        
+        await this.page.getByLabel(Locators.firstName).fill(Name);
+        await this.page.locator(Locators.lastName).fill("Singh");
+        await this.page.locator(Locators.Email).fill(emailId);
+        await this.page.locator(Locators.cellPhone).fill(`${mobNo}`)
+        await this.page.locator(Locators.createUserName).fill(userName);
+        await this.page.locator(Locators.createPassword).fill("Sk@sk241191");
+        await this.page.locator(Locators.confirmPassword).fill("Sk@sk241191");
+        await this.uploadMemberPhoto();
+        await this.page.locator(Locators.saveAndClose).click();
         await this.page.waitForTimeout(5000);
     }
 
-    public async assignMember(){
-        await this.page.locator(this.assignTeamMember).click();
-        await this.page.locator(this.addClassRoom).click();
-        await this.page.locator(this.addExistingClass).click();
-        await this.page.locator(this.existingClass).click();
-        await this.page.locator(this.saveClass).click();
+    public async uploadMemberPhoto() {
+        const [UploadFile] = await Promise.all([
+            this.page.waitForEvent('filechooser'),
+            this.page.locator(Locators.uploadPhoto).click()
+        ])
+        UploadFile.setFiles("src/img.png");
+    }
+
+    public async editUser() {
+        await this.page.getByRole('textbox', { name: 'Search team members' }).fill(Name);
+        await this.page.getByRole('link', { name: 'Edit' }).first().click();
+        await this.page.getByLabel(Locators.firstName).click();
+        await this.page.getByLabel(Locators.firstName).fill(Name);
+        await this.page.locator(Locators.saveAndClose).click();
+        await this.page.waitForTimeout(5000);
+    }
+
+    public async deleteUser() {
+        await this.page.getByRole('textbox', { name: 'Search team members' }).fill(Name);
+        await this.page.getByRole('link', { name: 'Edit' }).first().click();
+        await this.page.getByRole('button', { name: 'Delete' }).click();        
+        await this.page.locator(Locators.deleteConfirm).click();
+        await this.page.getByText(Locators.manageMember).click();        
         await this.page.waitForTimeout(5000);
     }
 }

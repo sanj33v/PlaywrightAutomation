@@ -1,27 +1,57 @@
 import { test, expect } from "@playwright/test";
-import HomePage from "../Pages/homePage"
+import homePage from "../Pages/homePage"
+import { Locators } from "../Constants.ts/UIElements";
 
-test("DemoTest", async ({ page }) => {
-    const homepage = new HomePage(page);
+test("Add User", async ({ page }) => {
+    const HomePage = new homePage(page);
 
     //Naviagating to URL
-    await homepage.navigateToUrl();
+    await HomePage.navigateToUrl();
 
     //Login to the application
-    await homepage.login();
+    await HomePage.login();
 
     //Validating Landing page
-    expect(page.isVisible(homepage.Logo)).toBeTruthy();
+    expect(page.isVisible(Locators.Logo)).toBeTruthy();
 
-    //Navigationg to student Page
-    await homepage.navigateToStudent();
+    //Navigate to setup Page and manage Team member
+    await HomePage.navigateToSetup();
 
     //Validating student landing page
-    expect(page.isVisible(homepage.studentPage)).toBeTruthy();
+    expect(page.isVisible(Locators.teamMemberPage)).toBeTruthy();
 
     //Creating new student with all details
-    await homepage.addStudents();
+    await HomePage.addMembers();
+})
 
-    //assigning team member
-    await homepage.assignMember();
+test("Edit User", async ({ page }) => {
+    const HomePage = new homePage(page);
+
+    //Naviagating to URL
+    await HomePage.navigateToUrl();
+
+    //Login to the application
+    await HomePage.login();
+
+    // //Navigate to setup Page and manage Team member
+    await HomePage.navigateToSetup();
+
+    // //Edit User
+    await HomePage.editUser();
+})
+
+test("Delete User", async ({ page }) => {
+    const HomePage = new homePage(page);
+
+    //Naviagating to URL
+    await HomePage.navigateToUrl();
+
+    //Login to the application
+    await HomePage.login();
+
+    //Navigate to setup Page and manage Team member
+    await HomePage.navigateToSetup();
+
+    //Edit User
+    await HomePage.deleteUser();
 })
