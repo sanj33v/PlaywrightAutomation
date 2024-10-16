@@ -40,11 +40,14 @@ export default class homePage {
     public async navigateToSetup() {
         await this.page.getByRole('link', { name: 'Setup' }).click();
         await this.page.getByLabel(Locators.manageMember).click();
-        await this.page.getByRole('textbox', { name: 'Search team members' }).click();
+        await this.page.getByRole('textbox', { name: 'Search team members' }).click().catch((error) => {
+            console.error(`not able to locate element ${error}`);
+            throw error;
+        });
     }
 
     public async addMembers() {
-        await this.page.getByRole('button', { name: 'Add Team Member' }).click();        
+        await this.page.getByRole('button', { name: 'Add Team Member' }).click();
         await this.page.getByLabel(Locators.firstName).fill(Name);
         await this.page.locator(Locators.lastName).fill("Singh");
         await this.page.locator(Locators.Email).fill(emailId);
@@ -70,16 +73,22 @@ export default class homePage {
         await this.page.getByRole('link', { name: 'Edit' }).first().click();
         await this.page.getByLabel(Locators.firstName).click();
         await this.page.getByLabel(Locators.firstName).fill(Name);
-        await this.page.locator(Locators.saveAndClose).click();
-        await this.page.waitForTimeout(5000);
+        await this.page.locator(Locators.saveAndClose).click().catch((error) => {
+            console.error(`not able to locate element ${error}`);
+            throw error;
+        });
     }
 
     public async deleteUser() {
         await this.page.getByRole('textbox', { name: 'Search team members' }).fill(Name);
         await this.page.getByRole('link', { name: 'Edit' }).first().click();
-        await this.page.getByRole('button', { name: 'Delete' }).click();        
-        await this.page.locator(Locators.deleteConfirm).click();
-        await this.page.getByText(Locators.manageMember).click();        
+        await this.page.getByRole('button', { name: 'Delete' }).click();
+        await this.page.locator(Locators.deleteConfirm).click()
+            .catch((error) => {
+                console.error(`not able to locate element ${error}`);
+                throw error;
+            });
+        await this.page.getByText(Locators.manageMember).click();
         await this.page.waitForTimeout(5000);
     }
 }
