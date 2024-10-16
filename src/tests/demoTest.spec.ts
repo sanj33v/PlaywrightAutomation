@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import homePage from "../Pages/homePage"
-import { Locators } from "../Constants.ts/UIElements";
+import { Locators } from "../Constants/UIElements";
 
 test("Add User", async ({ page }) => {
     const HomePage = new homePage(page);
