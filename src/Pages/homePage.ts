@@ -14,6 +14,7 @@ var mobNo = Math.floor(Math.random() * 9000000000) + 1000000000;
 const Name = "SanjeevKumar" + guid;
 const userName = "SanjeevKumar@" + guid;
 const emailId = guid + "sanjeev@gmail.com"
+
 export default class homePage {
 
 
